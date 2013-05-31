@@ -1,3 +1,11 @@
+/**
+ * JSCopyControl
+ * 
+ * Author: Leo Selig
+ * Version: 0.1
+ * 
+ * License: MIT
+ */
 (function(window) {
 	var lastCopiedText = null;
 	var lastCopyInfo = null;
