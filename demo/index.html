@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Demo JSCopyControl</title>
+
+<script type="text/javascript" src="../src/copycontrol.js"></script>
+
+<script type="text/javascript">
+	
+copycontrol.oncopy = function(copiedText, selection) {
+	if((selection.anchorNode.parentNode.className === 'message')
+			|| selection.anchorNode.parentNode.parentNode.className === 'message') {
+		return 'quote';
+	}
+}
+
+copycontrol.onpaste = function(pasteText, copyInfo, targetElement) {
+	if(copyInfo === 'quote') {
+		return '[quote]' + pasteText + '[/quote]';
+	}
+	return pasteText;
+}
+	
+</script>
+</head>
+<body onload="copycontrol.init()">
+<div class="message">Message: Lorem ipsum dolor sit amet.</div>
+<div class="message">
+Message: Amazingly few discotheques provide jukeboxes.<br>
+<span>Did you know above sentence is a pangram?</span>
+</div>
+<br>
+No message here...
+
+
+<input type="text" placeholder="Paste here">
+</body>
+</html>

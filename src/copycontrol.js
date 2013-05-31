@@ -35,17 +35,22 @@
 	    window.setTimeout(function() {
 			var pastedText = target.value;
 			target.value = curVal;
-		    if(pasteText === pastedText) {
-		    	pasteText = window.copycontrol.onpaste(pasteText, lastCopyInfo, target);
-		    	if(pasteText !== null) {
-		    		target.value = tmpVal.slice(0, selStart) + pasteText + tmpVal.slice(selEnd);
-		    		target.selectionStart = target.selectionEnd = selStart + pasteText.length;
-		    	}
-		    }
+			pasteText = window.copycontrol.onpaste(
+					pasteText,
+					(pasteText === pastedText) ? lastCopyInfo : null,
+					target);
+	    	if(pasteText !== null) {
+	    		target.value = curVal.slice(0, selStart) + pasteText + curVal.slice(selEnd);
+	    		target.selectionStart = target.selectionEnd = selStart + pasteText.length;
+	    	}
 	    }, 1);
     }
     
     window.copycontrol = {
+    		/**
+    		 * Initializes the plugin
+    		 * Should be called whe DOM is ready
+    		 */
     		init: function() {
     			var body = document.getElementsByTagName('body')[0];
     			if(typeof document.addEventListener !== 'undefined') {
@@ -57,9 +62,29 @@
     				body.attachEvent('onpaste', onPaste);
     			}
     		},
-    		oncopy: function(selection) {
+    		
+    		/**
+    		 * Listener to be evoked when the user copies text on the page
+    		 * Can be overwritten in order to listen to copy events
+    		 * 
+    		 * @param {String} copiedText The string that has been copied
+    		 * @param {Selection} selection The selection object from which the text copy was created
+    		 * @returns {Object} information to attach to the current copied text
+    		 */
+    		oncopy: function(copiedText, selection) {
     			return null;
     		},
+    		
+    		/**
+    		 * Listener to be evoked when the user pastes text into an input or textarea element
+    		 * Can be overwritten in order to listen to paste events
+    		 * 
+    		 * @param {String} Text that is pasted
+    		 * @param [Object} Information attached to corresponding copy event
+    		 * @param {HTMLElement} Target element on which the event occured
+    		 * 
+    		 * @returns {Object} information to attach to the current copied text
+    		 */
     		onpaste: function(pasteText, copyInfo, targetElement) {
     			return pasteText;
     		}
